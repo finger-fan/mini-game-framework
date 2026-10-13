@@ -6,3 +6,5 @@ interface Window {
 }
 
 declare var wx: any;
+declare var tt: any;  // 抖音小游戏
+declare var ks: any;  // 快手小游戏

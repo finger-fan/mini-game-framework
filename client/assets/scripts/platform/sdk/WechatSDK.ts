@@ -120,7 +120,7 @@ export class WechatSDK {
                     reject(res)
                 }
             })
-        })
+        });
     }
 
     static vibrateLong(): Promise<any> {
@@ -133,7 +133,7 @@ export class WechatSDK {
                     reject(res)
                 }
             })
-        })
+        });
     }
 
     static onShareAppMessage(title: string): Promise<any> {
@@ -144,7 +144,7 @@ export class WechatSDK {
                 }
             })
             resolve(true)
-        })
+        });
     }
 
     static onShareTimeline(title: string): Promise<any> {
@@ -155,7 +155,7 @@ export class WechatSDK {
                 }
             })
             resolve(true)
-        })
+        });
     }
 
     static createRewardedVideoAd(): Promise<any> {
@@ -165,24 +165,59 @@ export class WechatSDK {
             })
 
             ad.onLoad(() => {
-                console.log('加载激励广告！')
+                console.log('[Wechat] 激励广告加载成功');
             })
 
             ad.onError((err) => {
-                console.error('激励广告错误：', err)
+                console.error('[Wechat] 激励广告错误：', err)
                 reject(err)
             })
 
             ad.onClose((res) => {
-                console.log('激励广告关闭：', res.isEnded)
+                console.log('[Wechat] 激励广告关闭：', res.isEnded)
                 resolve(res)
             })
 
-            ad.show(() => {
-                console.error('激励广告显示！')
-            }).catch(err => {
-                console.error('激励广告错误：', err)
+            ad.show().catch(err => {
+                console.error('[Wechat] 激励广告显示失败：', err)
             })
-        })
+        });
+    }
+
+    static createInterstitialAd(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            let ad = wx.createInterstitialAd({
+                adUnitId: wechatConfig.interstitialID
+            })
+
+            ad.onLoad(() => {
+                console.log('[Wechat] 插屏广告加载成功');
+            })
+
+            ad.onError((err) => {
+                console.error('[Wechat] 插屏广告错误：', err)
+                reject(err)
+            })
+
+            ad.onClose(() => {
+                console.log('[Wechat] 插屏广告关闭');
+                resolve(true);
+            })
+
+            ad.show().catch(err => {
+                console.error('[Wechat] 插屏广告显示失败：', err)
+            })
+        });
+    }
+
+    static createBannerAd() {
+        return wx.createBannerAd({
+            adUnitId: wechatConfig.bannerID,
+            style: {
+                left: 0,
+                top: 0,
+                width: 320
+            }
+        });
     }
 }
